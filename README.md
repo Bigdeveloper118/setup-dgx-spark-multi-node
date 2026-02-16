@@ -109,6 +109,19 @@ Validate:
 
 which spark-submit
 
+update spark-env.sh:
+# ไฟล์: $SPARK_HOME/conf/spark-env.sh ใน DGX 1 และ 2
+
+# 1. ระบุ IP ของ DGX ในวงปกติ (1.x) เพื่อเอาไว้รับคำสั่งจาก Master
+export SPARK_WORKER_HOST=192.168.1.xx
+
+# 2. หัวใจสำคัญ: ระบุ IP วง Stack (100.x) เพื่อให้ Spark ใช้รับส่งข้อมูลหนักๆ
+# ข้อมูลจะวิ่งท่อนี้เท่านั้น ไม่ผ่าน Master
+export SPARK_LOCAL_IP=192.168.100.xx 
+
+# 3. ตั้งค่า MTU ให้ Worker คุยกันเองด้วยกล่องใหญ่ (ถ้ามีใน Config)
+# ปกติถ้า interface bond1 เป็น 9000 อยู่แล้ว Spark จะใช้ตามนั้นเอง
+
 ---
 
 # 7. Fix Hostname Resolution (CRITICAL)
